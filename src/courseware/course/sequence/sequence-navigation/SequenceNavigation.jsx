@@ -35,6 +35,7 @@ const SequenceNavigation = ({
     isFirstUnit,
     isLastUnit,
     nextLink,
+    nextSequenceTitle,
     previousLink,
     navigationDisabledPrevSequence,
     navigationDisabledNextSequence,
@@ -93,7 +94,6 @@ const SequenceNavigation = ({
     const buttonText = (isLastUnit && exitText) ? exitText : intl.formatMessage(messages.nextButton);
     const disabled = isLastUnit && !exitActive;
     const nextArrow = isRtl(getLocale()) ? ChevronLeft : ChevronRight;
-
     return navigationDisabledNextSequence || (
       <Button
         variant="link"
@@ -104,7 +104,26 @@ const SequenceNavigation = ({
         as={disabled ? undefined : Link}
         to={disabled ? undefined : nextLink}
       >
-        {shouldDisplayNotificationTriggerInSequence ? null : buttonText}
+        {nextSequenceTitle ? (
+          <div style={{ textAlign: 'left' }}>
+            <span>Next Module</span>
+            <span style={{
+              fontSize: 'smaller',
+              color: '#6c757d',
+              display: 'block',
+              marginTop: '0.1rem',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '10rem',
+            }}
+            >
+              {nextSequenceTitle}
+            </span>
+          </div>
+        ) : (
+          <span>{shouldDisplayNotificationTriggerInSequence ? null : buttonText}</span>
+        )}
       </Button>
     );
   };
