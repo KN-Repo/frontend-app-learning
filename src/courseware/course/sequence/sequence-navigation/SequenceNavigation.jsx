@@ -115,7 +115,7 @@ const SequenceNavigation = ({
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              maxWidth: '10rem',
+              maxWidth: '7rem',
             }}
             >
               {nextSequenceTitle}
