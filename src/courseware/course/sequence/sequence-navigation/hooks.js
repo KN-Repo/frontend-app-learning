@@ -22,6 +22,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
       isLastUnit: false,
       navigationDisabledNextSequence: false,
       navigationDisabledPrevSequence: false,
+      nextSequenceTitle: null,
     };
   }
 
@@ -42,6 +43,12 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const previousSequenceId = sequenceIndex > 0 ? sequenceIds[sequenceIndex - 1] : null;
 
   let nextLink;
+  let nextSequenceTitle = null;
+
+  // Always call useModel, regardless of the condition
+  const nextSequence = nextSequenceId ? useModel('sequences', nextSequenceId) : null;
+
+  // Handle nextLink and nextSequenceTitle logic
   if (isLastUnit) {
     nextLink = `/course/${courseId}/course-end`;
   } else {
@@ -51,6 +58,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
       nextLink = `/course/${courseId}/${currentSequenceId}/${nextUnitId}`;
     } else if (nextSequenceId) {
       nextLink = `/course/${courseId}/${nextSequenceId}/first`;
+      nextSequenceTitle = nextSequence ? nextSequence.title : null; // Safely extract title
     }
   }
 
@@ -70,6 +78,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
     previousLink,
     navigationDisabledNextSequence,
     navigationDisabledPrevSequence,
+    nextSequenceTitle,
   };
 }
 
