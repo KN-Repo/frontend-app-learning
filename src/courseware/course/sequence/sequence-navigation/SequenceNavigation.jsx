@@ -107,7 +107,7 @@ const SequenceNavigation = ({
         {nextSequenceTitle ? (
           <div style={{ textAlign: 'left' }}>
             <span>Next Module</span>
-            <span className='next-module-title'>
+            <span className="next-module-title">
               {nextSequenceTitle}
             </span>
           </div>
