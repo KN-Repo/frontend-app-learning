@@ -42,11 +42,11 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const nextSequenceId = sequenceIndex < sequenceIds.length - 1 ? sequenceIds[sequenceIndex + 1] : null;
   const previousSequenceId = sequenceIndex > 0 ? sequenceIds[sequenceIndex - 1] : null;
 
+  // Always call useModel, regardless of the condition
+  const nextSequence = useModel('sequences', nextSequenceId || 'placeholder-id');
+
   let nextLink;
   let nextSequenceTitle = null;
-
-  // Always call useModel, regardless of the condition
-  const nextSequence = nextSequenceId ? useModel('sequences', nextSequenceId) : null;
 
   // Handle nextLink and nextSequenceTitle logic
   if (isLastUnit) {
@@ -58,7 +58,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
       nextLink = `/course/${courseId}/${currentSequenceId}/${nextUnitId}`;
     } else if (nextSequenceId) {
       nextLink = `/course/${courseId}/${nextSequenceId}/first`;
-      nextSequenceTitle = nextSequence ? nextSequence.title : null; // Safely extract title
+      nextSequenceTitle = nextSequence && nextSequence.title ? nextSequence.title : null; // Safely extract title
     }
   }
 
