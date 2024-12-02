@@ -1,3 +1,14 @@
 .sequence-navigation .btn{
-    height: 3.5rem !important;
-  }
+  height: 3.5rem !important;
+}
+
+.next-module-title {
+  font-size: smaller;
+  color: #6c757d;
+  display: block;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 7rem;
+}

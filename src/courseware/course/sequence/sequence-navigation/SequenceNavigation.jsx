@@ -107,17 +107,7 @@ const SequenceNavigation = ({
         {nextSequenceTitle ? (
           <div style={{ textAlign: 'left' }}>
             <span>Next Module</span>
-            <span style={{
-              fontSize: 'smaller',
-              color: '#6c757d',
-              display: 'block',
-              marginTop: '0.1rem',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: '7rem',
-            }}
-            >
+            <span className="next-module-title">
               {nextSequenceTitle}
             </span>
           </div>
