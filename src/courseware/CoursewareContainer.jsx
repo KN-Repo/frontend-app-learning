@@ -273,6 +273,7 @@ class CoursewareContainer extends Component {
       courseId,
       sequenceId,
       routeUnitId,
+      sequence, // Ensure this is destructured from props
     } = this.props;
 
     return (
@@ -290,6 +291,8 @@ class CoursewareContainer extends Component {
           nextSequenceHandler={this.handleNextSequenceClick}
           previousSequenceHandler={this.handlePreviousSequenceClick}
           unitNavigationHandler={this.handleUnitNavigationClick}
+          checkFetchSequence={this.checkFetchSequence} // Added this line
+          sequence2={sequence} // Pass the sequence data here
         />
       </TabPage>
     );
