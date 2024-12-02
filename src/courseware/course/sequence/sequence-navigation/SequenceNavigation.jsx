@@ -50,6 +50,9 @@ const SequenceNavigation = ({
 
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
 
+  console.log("sanu 2.1",sequence)
+  console.log("sanu 2.2",sequence.showCompletion)
+
   const renderUnitButtons = () => {
     if (isLocked) {
       return (

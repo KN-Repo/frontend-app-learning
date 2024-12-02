@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -48,6 +48,26 @@ const Sequence = ({
   } = useModel('courseHomeMeta', courseId);
   const sequence = useModel('sequences', sequenceId);
   const unit = useModel('units', unitId);
+
+
+
+// ** Get units for the current sequence only **
+const unitsById = useSelector(state => state.models.units || {});
+const units = useMemo(() => {
+  if (!sequence || !sequence.unitIds) {
+    return [];
+  }
+  return sequence.unitIds.map(uid => unitsById[uid]).filter(Boolean);
+}, [sequence?.unitIds, unitsById]);
+
+// Compute completion percentage based on units in the current sequence
+const totalUnits = units.length;
+const completedUnits = units.filter(unit => unit.complete).length;
+const completionPercentage = totalUnits === 0 ? 0 : Math.round((completedUnits / totalUnits) * 100);
+
+
+
+
   const sequenceStatus = useSelector(state => state.courseware.sequenceStatus);
   const sequenceMightBeUnit = useSelector(state => state.courseware.sequenceMightBeUnit);
   const { enableNavigationSidebar: isEnabledOutlineSidebar } = useSelector(getCoursewareOutlineSidebarSettings);
@@ -61,6 +81,7 @@ const Sequence = ({
       nextSequenceHandler();
     }
   };
+  console.log("sanu 7",units)
 
   const handlePrevious = () => {
     const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
@@ -164,6 +185,7 @@ const Sequence = ({
 
   const defaultContent = (
     <>
+   
       <div className="sequence-container d-inline-flex flex-row w-100">
         <CourseOutlineTrigger />
         <CourseOutlineTray />
@@ -190,6 +212,26 @@ const Sequence = ({
           )}
 
           <div className="unit-container flex-grow-1 pt-4">
+          <div>
+      {/* Progress Bar */}
+      <div className="progress-bar-container">
+      <div className="progress-bar-above-text">
+          {`Module Completion`}
+        </div>
+        <div className="progress-bar">
+          <div
+            className="progress-bar-fill"
+            style={{ width: `${completionPercentage}%` }}
+          ></div>
+        </div>
+        <div className="progress-bar-below-text">
+          {`${completionPercentage}%`}
+        </div>
+      </div>
+
+      {/* Rest of your component rendering */}
+      { /* existing content */ }
+    </div>
             <SequenceContent
               courseId={courseId}
               gated={gated}
