@@ -138,7 +138,7 @@ export function fetchSequence(sequenceId) {
     dispatch(fetchSequenceRequest({ sequenceId }));
     try {
       const { sequence, units } = await getSequenceMetadata(sequenceId);
-      console.log("sanu 04", sequence, units)
+      console.log('sanu 04', sequence, units);
       if (sequence.blockType !== 'sequential') {
         // Some other block types (particularly 'chapter') can be returned
         // by this API. We want to error in that case, since downstream

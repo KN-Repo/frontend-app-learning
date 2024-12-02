@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { defaultMemoize as memoize } from 'reselect';
-
 import {
   checkBlockCompletion,
   fetchCourse,
@@ -287,6 +286,7 @@ class CoursewareContainer extends Component {
         <Course
           courseId={courseId}
           sequenceId={sequenceId}
+          nextSequenceId={this.props.nextSequence ? this.props.nextSequence.id : null}
           unitId={routeUnitId}
           nextSequenceHandler={this.handleNextSequenceClick}
           previousSequenceHandler={this.handlePreviousSequenceClick}
