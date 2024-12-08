@@ -51,9 +51,6 @@ const SequenceNavigation = ({
 
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
 
-  console.log('sanu 2.1', sequence);
-  console.log('sanu 2.2', sequence.showCompletion);
-
   const renderUnitButtons = () => {
     if (isLocked) {
       return (
@@ -104,7 +101,9 @@ const SequenceNavigation = ({
     return navigationDisabledNextSequence || (
       <Button
         variant="link"
-        className="next-btn"
+        className={classNames('next-btn', {
+          'bg-light-purple': nextSequence.title && isLastUnitInSequence,
+        })}
         onClick={nextHandler}
         disabled={disabled}
         iconAfter={nextArrow}

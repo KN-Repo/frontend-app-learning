@@ -28,7 +28,6 @@ const Course = ({
   previousSequenceHandler,
   unitNavigationHandler,
   windowWidth,
-  sequence2,
 }) => {
   const course = useModel('coursewareMeta', courseId);
   const {
@@ -45,7 +44,6 @@ const Course = ({
     section,
     course,
   ].filter(element => element != null).map(element => element.title);
-  console.log('sanu 3', sequence2);
 
   // Below the tabs, above the breadcrumbs alerts (appearing in the order listed here)
   const dispatch = useDispatch();

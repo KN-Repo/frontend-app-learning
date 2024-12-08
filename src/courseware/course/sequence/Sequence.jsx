@@ -77,7 +77,6 @@ const Sequence = ({
       nextSequenceHandler();
     }
   };
-  console.log('sanu 7', units);
 
   const handlePrevious = () => {
     const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
