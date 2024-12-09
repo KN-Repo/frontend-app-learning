@@ -43,10 +43,16 @@ const SequenceNavigationTabs = ({
           {unitIds.map(buttonUnitId => (
             <UnitButton
               key={buttonUnitId}
+              showTitle
+              showIcon={false}
               unitId={buttonUnitId}
               isActive={unitId === buttonUnitId}
               showCompletion={showCompletion}
               onClick={onNavigate}
+              unitsInSection={{
+                current: unitIds.indexOf(buttonUnitId) + 1,
+                length: unitIds.length,
+              }}
             />
           ))}
         </div>

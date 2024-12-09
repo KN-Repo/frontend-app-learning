@@ -25,17 +25,18 @@ const SequenceNavigation = ({
   intl,
   unitId,
   sequenceId,
+  nextSequenceId,
   className,
   onNavigate,
   nextHandler,
   previousHandler,
 }) => {
   const sequence = useModel('sequences', sequenceId);
+  const nextSequence = useModel('sequences', nextSequenceId);
   const {
     isFirstUnit,
     isLastUnit,
     nextLink,
-    nextSequenceTitle,
     previousLink,
     navigationDisabledPrevSequence,
     navigationDisabledNextSequence,
@@ -50,13 +51,10 @@ const SequenceNavigation = ({
 
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
 
-  console.log("sanu 2.1",sequence)
-  console.log("sanu 2.2",sequence.showCompletion)
-
   const renderUnitButtons = () => {
     if (isLocked) {
       return (
-        <UnitButton unitId={unitId} title="" contentType="lock" isActive onClick={() => {}} />
+        <UnitButton unitId={unitId} showIcon={false} showTitle contentType="lock" isActive onClick={() => {}} />
       );
     }
     if (sequence.unitIds.length === 0 || unitId === null) {
@@ -92,6 +90,9 @@ const SequenceNavigation = ({
     );
   };
 
+  const lastUnitId = sequence.unitIds[sequence.unitIds.length - 1];
+  const isLastUnitInSequence = unitId === lastUnitId;
+
   const renderNextButton = () => {
     const { exitActive, exitText } = GetCourseExitNavigation(courseId, intl);
     const buttonText = (isLastUnit && exitText) ? exitText : intl.formatMessage(messages.nextButton);
@@ -100,18 +101,20 @@ const SequenceNavigation = ({
     return navigationDisabledNextSequence || (
       <Button
         variant="link"
-        className="next-btn"
+        className={classNames('next-btn', {
+          'bg-light-purple': nextSequence.title && isLastUnitInSequence,
+        })}
         onClick={nextHandler}
         disabled={disabled}
         iconAfter={nextArrow}
         as={disabled ? undefined : Link}
         to={disabled ? undefined : nextLink}
       >
-        {nextSequenceTitle ? (
+        {nextSequence.title && isLastUnitInSequence ? (
           <div style={{ textAlign: 'left' }}>
             <span>Next Module</span>
             <span className="next-module-title">
-              {nextSequenceTitle}
+              {nextSequence.title}
             </span>
           </div>
         ) : (
@@ -133,6 +136,7 @@ const SequenceNavigation = ({
 SequenceNavigation.propTypes = {
   intl: intlShape.isRequired,
   sequenceId: PropTypes.string.isRequired,
+  nextSequenceId: PropTypes.string.isRequired,
   unitId: PropTypes.string,
   className: PropTypes.string,
   onNavigate: PropTypes.func.isRequired,

@@ -12,6 +12,7 @@ import BookmarkFilledIcon from '../../bookmark/BookmarkFilledIcon';
 const UnitButton = ({
   onClick,
   title,
+  showIcon,
   contentType,
   isActive,
   bookmarked,
@@ -20,6 +21,7 @@ const UnitButton = ({
   unitId,
   className,
   showTitle,
+  unitsInSection,
 }) => {
   const { courseId, sequenceId } = useSelector(state => state.courseware);
 
@@ -39,8 +41,8 @@ const UnitButton = ({
       as={Link}
       to={`/course/${courseId}/${sequenceId}/${unitId}`}
     >
-      <UnitIcon type={contentType} />
-      {showTitle && <span className="unit-title">{title}</span>}
+      {showIcon && <UnitIcon type={contentType} />}
+      {showTitle && <span className="unit-title">{`(${unitsInSection.current}/${unitsInSection.length}) ${title}`}</span>}
       {showCompletion && complete ? <CompleteIcon size="sm" className="text-success ml-2" /> : null}
       {bookmarked ? (
         <BookmarkFilledIcon
@@ -61,8 +63,13 @@ UnitButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   showCompletion: PropTypes.bool,
   showTitle: PropTypes.bool,
+  showIcon: PropTypes.bool,
   title: PropTypes.string.isRequired,
   unitId: PropTypes.string.isRequired,
+  unitsInSection: PropTypes.shape({
+    current: PropTypes.number.isRequired,
+    length: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 UnitButton.defaultProps = {
@@ -71,6 +78,7 @@ UnitButton.defaultProps = {
   bookmarked: false,
   complete: false,
   showTitle: false,
+  showIcon: true,
   showCompletion: true,
 };
 

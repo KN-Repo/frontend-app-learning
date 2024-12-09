@@ -22,12 +22,12 @@ import Sequence from './sequence';
 const Course = ({
   courseId,
   sequenceId,
+  nextSequenceId,
   unitId,
   nextSequenceHandler,
   previousSequenceHandler,
   unitNavigationHandler,
   windowWidth,
-  sequence2
 }) => {
   const course = useModel('coursewareMeta', courseId);
   const {
@@ -44,7 +44,6 @@ const Course = ({
     section,
     course,
   ].filter(element => element != null).map(element => element.title);
-  console.log("sanu 3",sequence2)
 
   // Below the tabs, above the breadcrumbs alerts (appearing in the order listed here)
   const dispatch = useDispatch();
@@ -110,6 +109,7 @@ const Course = ({
       <Sequence
         unitId={unitId}
         sequenceId={sequenceId}
+        nextSequenceId={nextSequenceId}
         courseId={courseId}
         unitNavigationHandler={unitNavigationHandler}
         nextSequenceHandler={nextSequenceHandler}
@@ -134,6 +134,7 @@ const Course = ({
 Course.propTypes = {
   courseId: PropTypes.string,
   sequenceId: PropTypes.string,
+  nextSequenceId: PropTypes.string,
   unitId: PropTypes.string,
   nextSequenceHandler: PropTypes.func.isRequired,
   previousSequenceHandler: PropTypes.func.isRequired,
@@ -144,6 +145,7 @@ Course.propTypes = {
 Course.defaultProps = {
   courseId: null,
   sequenceId: null,
+  nextSequenceId: null,
   unitId: null,
 };
 
