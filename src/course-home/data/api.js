@@ -334,6 +334,16 @@ export function getTimeOffsetMillis(headerDate, requestTime, responseTime) {
   return timeOffsetMillis;
 }
 
+async function fetchRedirectionUrl(url) {
+  try {
+    const response = await fetch(url);
+    const resumeData = await response.json();
+    return resumeData.url;
+  } catch (error) {
+    throw new Error(`Failed to fetch redirection URL: ${error}`);
+  }
+}
+
 export async function getOutlineTabData(courseId) {
   const url = `${getConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
   const requestTime = Date.now();
@@ -358,6 +368,24 @@ export async function getOutlineTabData(courseId) {
     headers,
   } = tabData;
 
+  const resumeUrl = data.resume_course.url.replace('jump_to', 'get_jump_to_url');
+
+  // Fetch the redirection URL and store it in a variable
+  let redirectionUrl;
+  try {
+    redirectionUrl = await fetchRedirectionUrl(resumeUrl);
+  } catch (error) {
+    throw new Error(`Failed to fetch redirection URL: ${error}`);
+  }
+
+  let unitID;
+  let sequenceID;
+  if (redirectionUrl) {
+    const urlParts = redirectionUrl.split('/');
+    unitID = urlParts[urlParts.length - 1];
+    sequenceID = urlParts[urlParts.length - 2];
+  }
+
   const accessExpiration = camelCaseObject(data.access_expiration);
   const canShowUpgradeSock = data.can_show_upgrade_sock;
   const certData = camelCaseObject(data.cert_data);
@@ -374,6 +402,10 @@ export async function getOutlineTabData(courseId) {
   const hasEnded = data.has_ended;
   const offer = camelCaseObject(data.offer);
   const resumeCourse = camelCaseObject(data.resume_course);
+  const resumeIds = camelCaseObject({
+    unitId: unitID,
+    sequenceId: sequenceID,
+  });
   const timeOffsetMillis = getTimeOffsetMillis(headers && headers.date, requestTime, responseTime);
   const userHasPassingGrade = data.user_has_passing_grade;
   const verifiedMode = camelCaseObject(data.verified_mode);
@@ -396,6 +428,7 @@ export async function getOutlineTabData(courseId) {
     hasEnded,
     offer,
     resumeCourse,
+    resumeIds,
     timeOffsetMillis, // This should move to a global time correction reference
     userHasPassingGrade,
     verifiedMode,
