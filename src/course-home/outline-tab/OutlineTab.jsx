@@ -24,9 +24,9 @@ import useCourseStartAlert from '../../alerts/course-start-alert';
 import usePrivateCourseAlert from './alerts/private-course-alert';
 import useScheduledContentAlert from './alerts/scheduled-content-alert';
 import { useModel } from '../../generic/model-store';
-import WelcomeMessage from './widgets/WelcomeMessage';
 import ProctoringInfoPanel from './widgets/ProctoringInfoPanel';
 import AccountActivationAlert from '../../alerts/logistration-alert/AccountActivationAlert';
+import CourseAnnouncement from './widgets/CourseAnnouncements';
 
 const OutlineTab = ({ intl }) => {
   const {
@@ -158,7 +158,8 @@ const OutlineTab = ({ intl }) => {
             </>
           )}
           <StartOrResumeCourseCard />
-          <WelcomeMessage courseId={courseId} />
+          {/* <WelcomeMessage courseId={courseId} /> */}
+          <CourseAnnouncement courseId={courseId} />
           {rootCourseId && (
             <>
               <div className="row w-100 m-0 mb-3 justify-content-end">
