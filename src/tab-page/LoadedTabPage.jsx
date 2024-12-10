@@ -40,8 +40,8 @@ const LoadedTabPage = ({
   if (updatesTool) {
     // Create a new array by copying the existing tabs array and adding the new tab
     finalTabs = [...finalTabs, {
-      slug: 'updates',
-      title: 'Updates',
+      slug: 'announcements',
+      title: 'Announcements',
       url: updatesTool.url ? updatesTool.url : null,
     }];
   }
