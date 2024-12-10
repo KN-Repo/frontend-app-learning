@@ -54,7 +54,7 @@ const SequenceNavigation = ({
   const renderUnitButtons = () => {
     if (isLocked) {
       return (
-        <UnitButton unitId={unitId} showIcon={false} showTitle contentType="lock" isActive onClick={() => {}} />
+        <UnitButton unitId={unitId} title="" contentType="lock" isActive onClick={() => {}} />
       );
     }
     if (sequence.unitIds.length === 0 || unitId === null) {
