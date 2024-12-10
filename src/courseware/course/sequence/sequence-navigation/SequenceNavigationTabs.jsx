@@ -36,7 +36,9 @@ const SequenceNavigationTabs = ({
         className="sequence-navigation-tabs-container"
       >
         <div
-          className="sequence-navigation-tabs d-flex flex-grow-1"
+          className={classNames('sequence-navigation-tabs', {
+            'd-flex flex-grow-1': !shouldDisplayDropdown,
+          })}
           style={shouldDisplayDropdown ? invisibleStyle : null}
           ref={containerRef}
         >
