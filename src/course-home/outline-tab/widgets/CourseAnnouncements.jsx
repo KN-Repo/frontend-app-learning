@@ -60,9 +60,6 @@ const CourseAnnouncement = ({ courseId }) => {
       >
         <Modal.Header>
           <Modal.Title>Latest Announcement</Modal.Title>
-          <span style={{ fontSize: '12px', color: '#6c757d' }}>
-            Sunday, 27 October 2024, 5.05 PM
-          </span>
         </Modal.Header>
         <Modal.Body>
           <LmsHtmlFragment
