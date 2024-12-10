@@ -30,13 +30,28 @@ const LoadedTabPage = ({
     title,
     verifiedMode,
   } = useModel('courseHomeMeta', courseId);
+  const {
+    courseTools,
+  } = useModel('outline', courseId);
+
+  let finalTabs = tabs;
+  // Find the URL for the "Updates" tool
+  const updatesTool = courseTools.find(tool => tool.title === 'Updates');
+  if (updatesTool) {
+    // Create a new array by copying the existing tabs array and adding the new tab
+    finalTabs = [...finalTabs, {
+      slug: 'updates',
+      title: 'Updates',
+      url: updatesTool.url ? updatesTool.url : null,
+    }];
+  }
 
   // Logistration and enrollment alerts are only really used for the outline tab, but loaded here to put them above
   // breadcrumbs when they are visible.
   const logistrationAlert = useLogistrationAlert(courseId);
   const enrollmentAlert = useEnrollmentAlert(courseId);
 
-  const activeTab = tabs.filter(tab => tab.slug === activeTabSlug)[0];
+  const activeTab = finalTabs.filter(tab => tab.slug === activeTabSlug)[0];
 
   const streakLengthToCelebrate = celebrations && celebrations.streakLengthToCelebrate;
   const streakDiscountCouponEnabled = celebrations && celebrations.streakDiscountEnabled && verifiedMode;
@@ -78,7 +93,7 @@ const LoadedTabPage = ({
             ...logistrationAlert,
           }}
         />
-        <CourseTabsNavigation tabs={tabs} className="mb-3" activeTabSlug={activeTabSlug} />
+        <CourseTabsNavigation tabs={finalTabs} className="mb-3" activeTabSlug={activeTabSlug} />
         <div className="container-xl">
           {children}
         </div>

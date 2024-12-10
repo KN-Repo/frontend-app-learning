@@ -6,7 +6,11 @@ import LmsHtmlFragment from '../LmsHtmlFragment';
 import './CourseAnnouncements.scss';
 
 const CourseAnnouncement = ({ courseId }) => {
-  const { welcomeMessageHtml } = useModel('outline', courseId);
+  const { welcomeMessageHtml, courseTools } = useModel('outline', courseId);
+
+  // Find the URL for the "Updates" tool
+  const updatesTool = courseTools.find(tool => tool.title === 'Updates');
+  const updatesLink = updatesTool ? updatesTool.url : null;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -71,7 +75,7 @@ const CourseAnnouncement = ({ courseId }) => {
         </Modal.Body>
         <div className="modal-footer-announcements">
           <button type="button" className="announcements-close-modal-btn" onClick={toggleModal}>Close</button>
-          <Button variant="primary">View all announcements</Button>
+          <Button variant="primary" href={updatesLink}>View all announcements</Button>
         </div>
       </Modal>
     </div>

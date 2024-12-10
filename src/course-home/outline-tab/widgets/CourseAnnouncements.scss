@@ -78,3 +78,9 @@
         }
     }
   }
+
+  .modal-dialog:active, .modal-body:active, .modal-content:active, .modal, .modal:active,
+  .modal:focus, .modal-dialog:focus, .modal-body:focus, .modal-content:focus{
+    outline: none;
+    border-color: transparent;
+  }
