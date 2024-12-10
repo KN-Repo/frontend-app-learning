@@ -29,6 +29,15 @@ const UnitButton = ({
     onClick(unitId);
   }, [onClick, unitId]);
 
+  let unitNumbersFraction = '';
+  let truncatedTitle = title;
+  if (unitsInSection) {
+    unitNumbersFraction = `(${unitsInSection.current}/${unitsInSection.length})`;
+    if (title.length > 15 && (unitsInSection.length === 4 || unitsInSection.length === 5)) {
+      truncatedTitle = `${title.substring(0, 15)}...`;
+    }
+  }
+
   return (
     <Button
       className={classNames({
@@ -42,7 +51,7 @@ const UnitButton = ({
       to={`/course/${courseId}/${sequenceId}/${unitId}`}
     >
       {showIcon && <UnitIcon type={contentType} />}
-      {showTitle && <span className="unit-title">{`(${unitsInSection.current}/${unitsInSection.length}) ${title}`}</span>}
+      {showTitle && <span className="unit-title">{`${unitNumbersFraction} ${truncatedTitle}`}</span>}
       {showCompletion && complete ? <CompleteIcon size="sm" className="text-success ml-2" /> : null}
       {bookmarked ? (
         <BookmarkFilledIcon
@@ -67,9 +76,9 @@ UnitButton.propTypes = {
   title: PropTypes.string.isRequired,
   unitId: PropTypes.string.isRequired,
   unitsInSection: PropTypes.shape({
-    current: PropTypes.number.isRequired,
-    length: PropTypes.number.isRequired,
-  }).isRequired,
+    current: PropTypes.number,
+    length: PropTypes.number,
+  }),
 };
 
 UnitButton.defaultProps = {
@@ -80,6 +89,7 @@ UnitButton.defaultProps = {
   showTitle: false,
   showIcon: true,
   showCompletion: true,
+  unitsInSection: null,
 };
 
 const mapStateToProps = (state, props) => {
