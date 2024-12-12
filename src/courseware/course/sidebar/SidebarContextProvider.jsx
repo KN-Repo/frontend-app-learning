@@ -24,8 +24,9 @@ const SidebarProvider = ({
   const isUnitHasDiscussionTopics = topic?.id && topic?.enabledInContext;
   const shouldDisplayFullScreen = useWindowSize().width < breakpoints.extraLarge.minWidth;
   const shouldDisplaySidebarOpen = useWindowSize().width > breakpoints.extraLarge.minWidth;
+  const query = new URLSearchParams(window.location.search);
   const { alwaysOpenAuxiliarySidebar } = useSelector(getCoursewareOutlineSidebarSettings);
-  const isInitiallySidebarOpen = false;
+  const isInitiallySidebarOpen = shouldDisplaySidebarOpen || query.get('sidebar') === 'true';
 
   let initialSidebar = null;
   if (isInitiallySidebarOpen && alwaysOpenAuxiliarySidebar) {

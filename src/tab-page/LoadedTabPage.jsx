@@ -36,7 +36,7 @@ const LoadedTabPage = ({
 
   let finalTabs = tabs;
   // Find the URL for the "Updates" tool
-  const updatesTool = courseTools.find(tool => tool.title === 'Updates');
+  const updatesTool = courseTools ? courseTools.find(tool => tool.title === 'Updates') : null;
   if (updatesTool) {
     // Create a new array by copying the existing tabs array and adding the new tab
     finalTabs = [...finalTabs, {
