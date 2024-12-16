@@ -30,12 +30,8 @@ const UnitButton = ({
   }, [onClick, unitId]);
 
   let unitNumbersFraction = '';
-  let truncatedTitle = title;
   if (unitsInSection) {
     unitNumbersFraction = `(${unitsInSection.current}/${unitsInSection.length})`;
-    if (title.length > 15 && (unitsInSection.length === 4 || unitsInSection.length === 5)) {
-      truncatedTitle = `${title.substring(0, 15)}...`;
-    }
   }
 
   return (
@@ -51,7 +47,7 @@ const UnitButton = ({
       to={`/course/${courseId}/${sequenceId}/${unitId}`}
     >
       {showIcon && <UnitIcon type={contentType} />}
-      {showTitle && <span className="unit-title">{`${unitNumbersFraction} ${truncatedTitle}`}</span>}
+      {showTitle && <span className="unit-title">{`${unitNumbersFraction} ${title}`}</span>}
       {showCompletion && complete ? <CompleteIcon size="sm" className="text-success ml-2" /> : null}
       {bookmarked ? (
         <BookmarkFilledIcon

@@ -1,0 +1,89 @@
+.announcement-container {
+    background-color: #FFFBEB; // Light yellow background
+    border: 1px solid #DEB887; // Light brown border
+    border-radius: 8px;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .announcement-container div:first-child {
+    margin-right: 15px;
+  }
+  
+  .announcements-dismiss-btn {
+    background: none;
+    border: none;
+    color: #AA6C39; // Link color
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    &:hover {
+        text-decoration: underline;
+    }
+  }
+  
+  .announcements-view-btn {
+    background-color: #C48742; // Brown button color
+    color: #FFF;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover {
+        background-color: #AA6C39; // Dark brown button color
+    }
+  }
+
+  .modal-header {
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-title {
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+  }
+  
+  .modal-body {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  .modal-footer-announcements {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .btn{
+        margin: 2rem;
+        margin-left: 0;
+    }
+
+    .announcements-close-modal-btn{
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-right: 2rem;
+        color: #a300a3;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+  }
+
+  .modal-dialog, 
+  .modal-dialog:focus-visible, 
+  .modal-dialog:focus, 
+  .modal-dialog:focus-within, 
+  .modal-dialog *:focus, 
+  .modal-dialog *:focus-visible {
+    box-shadow: none !important;
+  }
+  
