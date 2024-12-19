@@ -99,10 +99,10 @@ const StartOrResumeCourseCard = ({ intl }) => {
             <div style={{ fontSize: 'larger', fontWeight: 'normal', marginBottom: '0.3rem' }}>{hasVisitedCourse ? intl.formatMessage(messages.resumeBlurb) : intl.formatMessage(messages.startBlurb)}</div>
             {hasVisitedCourse && (
               loading ? (
-              <Spinner animation="border" variant="primary" size="sm" screenReaderText="loading" />
-            ) : (
-              <div className="text-muted" style={{ fontSize: 'smaller', fontWeight: 'normal' }}>{moduleTitle}</div>
-            )
+                <Spinner animation="border" variant="primary" size="sm" screenReaderText="loading" />
+              ) : (
+                <div className="text-muted" style={{ fontSize: 'smaller', fontWeight: 'normal' }}>{moduleTitle}</div>
+              )
             )}
           </div>
         )}
