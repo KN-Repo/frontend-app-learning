@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card } from '@openedx/paragon';
+import { Button, Card, Spinner } from '@openedx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import { useSelector } from 'react-redux';
@@ -11,7 +11,6 @@ import { getSequenceMetadata } from '../../../courseware/data/api';
 const StartOrResumeCourseCard = ({ intl }) => {
   const [sequenceDetails, setSequenceDetails] = useState(null);
   const [sequenceIndex, setSequenceIndex] = useState(null);
-  const [unitIndex, setUnitIndex] = useState(null);
   const [unitTitle, setUnitTitle] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -48,10 +47,14 @@ const StartOrResumeCourseCard = ({ intl }) => {
         const data = await getSequenceMetadata(resumeIds.sequenceId);
         setSequenceDetails(data);
 
-        const temUnitIndex = data.units.findIndex(unit => unit.id === resumeIds.unitId);
-        if (temUnitIndex !== -1) {
-          setUnitIndex(temUnitIndex);
-          setUnitTitle(data.units[temUnitIndex].title);
+        const unit = data.units.find(thisUnit => thisUnit.id === resumeIds.unitId);
+        if (unit) {
+          setUnitTitle(unit.title);
+        }
+
+        const seqIndex = data.units.findIndex(thisUnit => thisUnit.id === resumeIds.unitId);
+        if (seqIndex !== -1) {
+          setSequenceIndex(seqIndex);
         }
       } catch (error) {
         throw new Error('Failed to fetch sequence details');
@@ -72,9 +75,8 @@ const StartOrResumeCourseCard = ({ intl }) => {
     }
   }, [courseBlocks, resumeIds]);
 
-  // Module X: [Module Name] > [Unit Code]: [Unit Name]
-  const unitInfo = unitIndex !== null ? `> ${unitIndex + 1}: ${unitTitle}` : '';
-  const moduleTitle = loading ? 'Loading...' : `Module ${sequenceIndex + 1} : ${sequenceDetails?.sequence.title} ${unitInfo}`;
+  // Module X / [Module Name] / [Unit Name]
+  const moduleTitle = `Module ${sequenceIndex + 1} / ${sequenceDetails?.sequence.title} / ${unitTitle}`;
 
   if (!resumeCourseUrl) {
     return null;
@@ -92,7 +94,16 @@ const StartOrResumeCourseCard = ({ intl }) => {
     <Card className="mb-3 raised-card" data-testid="start-resume-card">
       <Card.Header
         // title={hasVisitedCourse ? intl.formatMessage(messages.resumeBlurb) : intl.formatMessage(messages.startBlurb)}
-        title={hasVisitedCourse ? moduleTitle : intl.formatMessage(messages.startBlurb)}
+        title={(
+          <div>
+            <div style={{ fontSize: 'larger', fontWeight: 'normal', marginBottom: '0.3rem' }}>{hasVisitedCourse ? intl.formatMessage(messages.resumeBlurb) : intl.formatMessage(messages.startBlurb)}</div>
+            {loading ? (
+              <Spinner animation="border" variant="primary" size="sm" screenReaderText="loading" />
+            ) : (
+              <div className="text-muted" style={{ fontSize: 'smaller', fontWeight: 'normal' }}>{moduleTitle}</div>
+            )}
+          </div>
+        )}
         actions={(
           <Button
             variant="brand"

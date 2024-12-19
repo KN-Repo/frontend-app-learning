@@ -31,7 +31,7 @@
     "url": "https://github.com/openedx/frontend-app-learning/issues"
   },
   "dependencies": {
-    "@edx/brand": "git+https://github.com/KN-Repo/brand-openedx.git#sprint06.04",
+    "@edx/brand": "git+https://github.com/KN-Repo/brand-openedx.git#sprint7",
     "@edx/frontend-component-header": "^5.0.2",
     "@edx/frontend-lib-learning-assistant": "^2.0.0",
     "@edx/frontend-lib-special-exams": "^3.0.1",

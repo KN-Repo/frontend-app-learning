@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import './Sidebar.scss';
 
 import SidebarContext from './SidebarContext';
 import { SIDEBARS } from './sidebars';

@@ -33,7 +33,12 @@ const SequenceNavigationDropdown = ({
           onClick={onNavigate}
           showCompletion={showCompletion}
           showTitle
+          showIcon={false}
           unitId={buttonUnitId}
+          unitsInSection={{
+            current: unitIds.indexOf(buttonUnitId) + 1,
+            length: unitIds.length,
+          }}
         />
       ))}
     </Dropdown.Menu>

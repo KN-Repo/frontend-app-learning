@@ -29,10 +29,10 @@ const SidebarProvider = ({
   const isInitiallySidebarOpen = shouldDisplaySidebarOpen || query.get('sidebar') === 'true';
 
   let initialSidebar = null;
-  if (isInitiallySidebarOpen && alwaysOpenAuxiliarySidebar) {
-    initialSidebar = isUnitHasDiscussionTopics
-      ? SIDEBARS[discussionsSidebar.ID].ID
-      : verifiedMode && SIDEBARS[notificationsSidebar.ID].ID;
+  if (isUnitHasDiscussionTopics) {
+    initialSidebar = SIDEBARS[discussionsSidebar.ID].ID;
+  } else if (isInitiallySidebarOpen && alwaysOpenAuxiliarySidebar) {
+    initialSidebar = verifiedMode && SIDEBARS[notificationsSidebar.ID].ID;
   }
   const [currentSidebar, setCurrentSidebar] = useState(initialSidebar);
   const [notificationStatus, setNotificationStatus] = useState(getLocalStorage(`notificationStatus.${courseId}`));
