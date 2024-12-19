@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import { useModel } from '../../../generic/model-store';
@@ -6,7 +6,13 @@ import LmsHtmlFragment from '../LmsHtmlFragment';
 import './CourseAnnouncements.scss';
 
 const CourseAnnouncement = ({ courseId }) => {
-  const { welcomeMessageHtml, courseTools } = useModel('outline', courseId);
+  const {
+    welcomeMessageHtml,
+    courseTools,
+    resumeCourse: {
+      hasVisitedCourse,
+    },
+  } = useModel('outline', courseId);
 
   // Find the URL for the "Updates" tool
   const updatesTool = courseTools.find(tool => tool.title === 'Updates');
@@ -28,6 +34,37 @@ const CourseAnnouncement = ({ courseId }) => {
   };
 
   const truncatedMessage = truncateMessage(welcomeMessageHtml, 100);
+
+  // Function to set a cookie
+  const setCookie = (name, value, days) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  };
+
+  // Function to get a cookie
+  const getCookie = (name) => {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') { c = c.substring(1, c.length); }
+      if (c.indexOf(nameEQ) === 0) { return c.substring(nameEQ.length, c.length); }
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const savedMessage = getCookie('lastAnnouncement');
+    if (hasVisitedCourse && truncatedMessage !== savedMessage) {
+      setIsModalOpen(true);
+      setCookie('lastAnnouncement', truncatedMessage, 7); // Save the message for 7 days
+    }
+  }, [hasVisitedCourse, truncatedMessage]);
+
+  if (!welcomeMessageHtml) {
+    return null;
+  }
 
   return (
     <div className="announcement-container">

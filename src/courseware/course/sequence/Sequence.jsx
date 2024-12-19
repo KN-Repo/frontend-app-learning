@@ -212,7 +212,7 @@ const Sequence = ({
               {/* Progress Bar */}
               <div className="progress-bar-container">
                 <div className="progress-bar-above-text">
-                  Module Completion
+                  Lesson Progress
                 </div>
                 <div className="progress-bar">
                   <div
