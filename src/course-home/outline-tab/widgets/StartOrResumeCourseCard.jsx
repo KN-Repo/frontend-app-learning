@@ -47,14 +47,9 @@ const StartOrResumeCourseCard = ({ intl }) => {
         const data = await getSequenceMetadata(resumeIds.sequenceId);
         setSequenceDetails(data);
 
-        const unit = data.units.find(thisUnit => thisUnit.id === resumeIds.unitId);
-        if (unit) {
-          setUnitTitle(unit.title);
-        }
-
-        const seqIndex = data.units.findIndex(thisUnit => thisUnit.id === resumeIds.unitId);
-        if (seqIndex !== -1) {
-          setSequenceIndex(seqIndex);
+        const temUnitIndex = data.units.findIndex(unit => unit.id === resumeIds.unitId);
+        if (temUnitIndex !== -1) {
+          setUnitTitle(data.units[temUnitIndex].title);
         }
       } catch (error) {
         throw new Error('Failed to fetch sequence details');
