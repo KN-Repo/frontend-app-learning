@@ -50,7 +50,7 @@ const SequenceNavigation = ({
   ) : undefined;
 
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
-
+  const nextTitle = sequence.sectionId === nextSequence.sectionId ? 'Next Lesson' : 'Next Module';
   const renderUnitButtons = () => {
     if (isLocked) {
       return (
@@ -112,7 +112,7 @@ const SequenceNavigation = ({
       >
         {nextSequence.title && isLastUnitInSequence ? (
           <div style={{ textAlign: 'left' }}>
-            <span>Next Module</span>
+            <span>{nextTitle}</span>
             <span className="next-module-title">
               {nextSequence.title}
             </span>
