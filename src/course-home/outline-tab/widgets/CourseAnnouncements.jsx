@@ -22,27 +22,13 @@ const CourseAnnouncement = ({ courseId }) => {
   const [isDismissed, setIsDismissed] = useState(false);
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
-  const handleDismiss = () => setIsDismissed(true);
 
-  if (isDismissed) { return null; }
-
-  const truncateMessage = (html, maxLength) => {
-    const plainText = new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
-    return plainText.length > maxLength
-      ? `${plainText.substring(0, maxLength)}...`
-      : plainText;
-  };
-
-  const truncatedMessage = truncateMessage(welcomeMessageHtml, 100);
-
-  // Function to set a cookie
   const setCookie = (name, value, days) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
   };
 
-  // Function to get a cookie
   const getCookie = (name) => {
     const nameEQ = `${name}=`;
     const ca = document.cookie.split(';');
@@ -54,15 +40,37 @@ const CourseAnnouncement = ({ courseId }) => {
     return null;
   };
 
+  const truncateMessage = (html, maxLength) => {
+    const plainText = new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
+    return plainText.length > maxLength
+      ? `${plainText.substring(0, maxLength)}...`
+      : plainText;
+  };
+
+  const truncatedMessage = truncateMessage(welcomeMessageHtml, 100);
+
+  const handleDismiss = () => {
+    setIsDismissed(true);
+    setIsModalOpen(false);
+    setCookie('announcementState', JSON.stringify({ isDismissed: true, message: truncatedMessage }), 7);
+  };
+
   useEffect(() => {
-    const savedMessage = getCookie('lastAnnouncement');
-    if (hasVisitedCourse && truncatedMessage !== savedMessage) {
+    const savedState = getCookie('announcementState');
+    if (savedState) {
+      const { isDismisedFlag, message } = JSON.parse(savedState);
+      if (isDismisedFlag && message === truncatedMessage) {
+        setIsDismissed(true);
+        return;
+      }
+    }
+    if (hasVisitedCourse && truncatedMessage !== savedState?.message) {
       setIsModalOpen(true);
-      setCookie('lastAnnouncement', truncatedMessage, 7); // Save the message for 7 days
+      setCookie('announcementState', JSON.stringify({ isDismissed: false, message: truncatedMessage }), 7);
     }
   }, [hasVisitedCourse, truncatedMessage]);
 
-  if (!welcomeMessageHtml) {
+  if (isDismissed || !welcomeMessageHtml) {
     return null;
   }
 
