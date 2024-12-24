@@ -9,42 +9,18 @@ const CourseAnnouncement = ({ courseId }) => {
   const {
     welcomeMessageHtml,
     courseTools,
-    resumeCourse: {
-      hasVisitedCourse,
-    },
+    resumeCourse: { hasVisitedCourse },
   } = useModel('outline', courseId);
 
-  // Find the URL for the "Updates" tool
-  const updatesTool = courseTools.find(tool => tool.title === 'Updates');
+  const updatesTool = courseTools.find((tool) => tool.title === 'Updates');
   const updatesLink = updatesTool ? updatesTool.url : null;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  const setCookie = (name, value, days) => {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
-  };
-
-  const getCookie = (name) => {
-    const nameEQ = `${name}=`;
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') { c = c.substring(1, c.length); }
-      if (c.indexOf(nameEQ) === 0) { return c.substring(nameEQ.length, c.length); }
-    }
-    return null;
-  };
-
   const truncateMessage = (html, maxLength) => {
     const plainText = new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
-    return plainText.length > maxLength
-      ? `${plainText.substring(0, maxLength)}...`
-      : plainText;
+    return plainText.length > maxLength ? `${plainText.substring(0, maxLength)}...` : plainText;
   };
 
   const truncatedMessage = truncateMessage(welcomeMessageHtml, 100);
@@ -52,21 +28,35 @@ const CourseAnnouncement = ({ courseId }) => {
   const handleDismiss = () => {
     setIsDismissed(true);
     setIsModalOpen(false);
-    setCookie('announcementState', JSON.stringify({ isDismissed: true, message: truncatedMessage }), 7);
+    localStorage.setItem(
+      'announcementState',
+      JSON.stringify({ isDismissed: true, message: truncatedMessage }),
+    );
   };
 
   useEffect(() => {
-    const savedState = getCookie('announcementState');
+    const savedState = localStorage.getItem('announcementState');
     if (savedState) {
-      const { isDismisedFlag, message } = JSON.parse(savedState);
-      if (isDismisedFlag && message === truncatedMessage) {
-        setIsDismissed(true);
-        return;
+      try {
+        const { isDismissed: savedDismissed, message: savedMessage } = JSON.parse(savedState);
+        if (savedDismissed) {
+          setIsDismissed(true);
+        } else {
+          setIsDismissed(false);
+          if (savedMessage !== truncatedMessage) {
+            setIsModalOpen(true);
+          }
+        }
+      } catch {
+        setIsDismissed(false);
+        setIsModalOpen(true);
       }
-    }
-    if (hasVisitedCourse && truncatedMessage !== savedState?.message) {
+    } else if (hasVisitedCourse) {
       setIsModalOpen(true);
-      setCookie('announcementState', JSON.stringify({ isDismissed: false, message: truncatedMessage }), 7);
+      localStorage.setItem(
+        'announcementState',
+        JSON.stringify({ isDismissed: false, message: truncatedMessage }),
+      );
     }
   }, [hasVisitedCourse, truncatedMessage]);
 
@@ -76,34 +66,24 @@ const CourseAnnouncement = ({ courseId }) => {
 
   return (
     <div className="announcement-container">
-      {/* Announcement Text */}
       <div>
-        <div
-          style={{ fontSize: 'small', fontWeight: 'bold', marginBottom: '5px' }}
-        >
+        <div style={{ fontSize: 'small', fontWeight: 'bold', marginBottom: '5px' }}>
           Course Announcement Update
         </div>
         <div style={{ fontSize: 'smaller' }}>{truncatedMessage}</div>
       </div>
 
-      {/* Buttons */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <button type="button" className="announcements-dismiss-btn" onClick={handleDismiss}>
           Dismiss
         </button>
-        <Button className="announcements-view-btn" onClick={toggleModal}>
+        <Button className="announcements-view-btn" onClick={() => setIsModalOpen(true)}>
           View
         </Button>
       </div>
 
-      {/* Modal */}
-      <Modal
-        show={isModalOpen}
-        onHide={toggleModal}
-        size="lg"
-        centered
-      >
-        <Modal.Header>
+      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} size="lg" centered>
+        <Modal.Header closeButton>
           <Modal.Title>Latest Announcement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -116,8 +96,18 @@ const CourseAnnouncement = ({ courseId }) => {
           />
         </Modal.Body>
         <div className="modal-footer-announcements">
-          <button type="button" className="announcements-close-modal-btn" onClick={toggleModal}>Close</button>
-          <Button variant="primary" href={updatesLink}>View all announcements</Button>
+          <button
+            type="button"
+            className="announcements-close-modal-btn"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Close
+          </button>
+          {updatesLink && (
+            <Button variant="primary" href={updatesLink}>
+              View all announcements
+            </Button>
+          )}
         </div>
       </Modal>
     </div>
