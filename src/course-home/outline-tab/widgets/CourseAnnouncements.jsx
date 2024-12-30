@@ -39,13 +39,17 @@ const CourseAnnouncement = ({ courseId }) => {
     if (savedState) {
       try {
         const { isDismissed: savedDismissed, message: savedMessage } = JSON.parse(savedState);
-        if (savedDismissed) {
+        if (savedMessage !== truncatedMessage) {
+          setIsDismissed(false);
+          setIsModalOpen(true);
+          localStorage.setItem(
+            'announcementState',
+            JSON.stringify({ isDismissed: false, message: truncatedMessage }),
+          );
+        } else if (savedDismissed) {
           setIsDismissed(true);
         } else {
           setIsDismissed(false);
-          if (savedMessage !== truncatedMessage) {
-            setIsModalOpen(true);
-          }
         }
       } catch {
         setIsDismissed(false);
