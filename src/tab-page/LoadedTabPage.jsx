@@ -34,16 +34,25 @@ const LoadedTabPage = ({
     courseTools,
   } = useModel('outline', courseId);
 
-  let finalTabs = tabs;
-  // Find the URL for the "Updates" tool
-  const updatesTool = courseTools ? courseTools.find(tool => tool.title === 'Updates') : null;
+  const updatesTool = courseTools?.find(tool => tool.title === 'Updates');
   if (updatesTool) {
-    // Create a new array by copying the existing tabs array and adding the new tab
-    finalTabs = [...finalTabs, {
-      slug: 'announcements',
-      title: 'Announcements',
-      url: updatesTool.url ? updatesTool.url : null,
-    }];
+    localStorage.setItem(`course-${courseId}-announcements`, JSON.stringify({
+      hasAnnouncements: true,
+      url: updatesTool.url,
+    }));
+  }
+
+  const lsData = localStorage.getItem(`course-${courseId}-announcements`);
+  let finalTabs = tabs;
+  if (lsData) {
+    const { hasAnnouncements, url } = JSON.parse(lsData);
+    if (hasAnnouncements) {
+      finalTabs = [...finalTabs, {
+        slug: 'announcements',
+        title: 'Announcements',
+        url: url || null,
+      }];
+    }
   }
 
   // Logistration and enrollment alerts are only really used for the outline tab, but loaded here to put them above
